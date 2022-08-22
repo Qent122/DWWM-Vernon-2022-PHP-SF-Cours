@@ -5,8 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PublicController extends AbstractController
 {
@@ -32,7 +37,18 @@ class PublicController extends AbstractController
         $formulaire = $this->createFormBuilder()
         ->add('Nom', TextType::class,
             ['attr' => ['class' => 'formCss']])
+        ->add('Prenom', TextType::class)
+        ->add('Mail', EmailType::class)
+        ->add('Entreprise', TextType::class, 
+            ['required' => false])
+        ->add('Telephone', TelType::class)
+        ->add('Objet_du_message', ChoiceType::class,
+            ['choices' => ['machine' => 'message', 'truc' => 'truc', 'bidule' => 'bidule']])
+        ->add('Message', TextareaType::class)
         ->add('Envoyer', SubmitType::class)
+        ->add('Annuler', ResetType::class)
+        // ->setMethod('post')
+        // ->setAction('/')
         ->getForm();
 
         return $this->render('public/contact.html.twig', [
