@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -32,7 +33,7 @@ class PublicController extends AbstractController
     }
 
     #[Route('/contact', name: 'contact')]
-    public function contact(): Response
+    public function contact(Request $request)
     {
         $formulaire = $this->createFormBuilder()
         ->add('Nom', TextType::class,
@@ -50,6 +51,12 @@ class PublicController extends AbstractController
         // ->setMethod('post')
         // ->setAction('/')
         ->getForm();
+
+        $formulaire->handleRequest($request);
+
+        if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+            dd($formulaire->getData()); // Récupère les datas du formulaire sous forme de tableau associatif
+        }
 
         return $this->render('public/contact.html.twig', [
             'controller_name' => 'Who am I?',
